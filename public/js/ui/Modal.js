@@ -5,14 +5,19 @@
  * закрытие имеющихся окон
  * */
 class Modal {
+  element;
   /**
    * Устанавливает текущий элемент в свойство element
    * Регистрирует обработчики событий с помощью Modal.registerEvents()
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor(element){
-
+  constructor( element ) {
+    if (!element) {
+      throw new Error( 'There is no element' );
+    }
+    this.element = element;
+    this.registerEvents();
   }
 
   /**
@@ -21,7 +26,10 @@ class Modal {
    * (с помощью метода Modal.onClose)
    * */
   registerEvents() {
-
+    [...this.element.querySelectorAll( '[data-dismiss="modal"]' )].
+      forEach( closeElement => closeElement.
+        addEventListener( 'click', evt => this.onClose( evt ) ) 
+      );
   }
 
   /**
@@ -29,19 +37,20 @@ class Modal {
    * Закрывает текущее окно (Modal.close())
    * */
   onClose(e) {
-
+    e.preventDefault();
+    this.close();
   }
   /**
    * Открывает окно: устанавливает CSS-свойство display
    * со значением «block»
    * */
   open() {
-
+    this.element.style.display = 'block';
   }
   /**
    * Закрывает окно: удаляет CSS-свойство display
    * */
-  close(){
-
+  close() {
+    this.element.style.display = 'none';
   }
 }
