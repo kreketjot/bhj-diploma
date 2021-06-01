@@ -28,8 +28,8 @@ const createRequest = ( { url, headers = {}, data = {}, responseType, method, ca
   // send
   let body = null;
   if (method !== 'GET') {
-    const body = new FormData();
-    for (let [key, value] of Object.entries( headers )) {
+    body = new FormData();
+    for (let [key, value] of Object.entries( data )) {
       body.append( key, value );
     }
   }
@@ -46,9 +46,10 @@ const createRequest = ( { url, headers = {}, data = {}, responseType, method, ca
     if (!pairs.length) {
       return url;
     }
-    url += `?${pairs[0]}=${pairs[1]}`;
+    url += `?${pairs[0][0]}=${pairs[0][1]}`;
     for (let i = 1; i < pairs.length; i++) {
-      url += `&${pairs[i]}=${pairs[i]}`;
+      url += `&${pairs[i][0]}=${pairs[i][1]}`;
     }
+    return url;
   }
 };
