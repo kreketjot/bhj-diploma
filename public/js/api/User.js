@@ -47,7 +47,7 @@ class User {
   static fetch( callback ) {
     const cb = callback; // чтобы в рекурсию не ушло
     createRequest( {
-      url: URL + '/current',
+      url: this.URL + '/current',
       responseType: 'json',
       method: 'GET',
       callback( error, response ) {
@@ -76,7 +76,7 @@ class User {
     }
     const cb = callback;
     createRequest( {
-      url: URL + '/login',
+      url: this.URL + '/login',
       data,
       responseType: 'json',
       method: 'POST',
@@ -100,7 +100,7 @@ class User {
     }
     const cb = callback;
     createRequest( {
-      url: URL + '/register',
+      url: this.URL + '/register',
       data,
       responseType: 'json',
       method: 'POST',
@@ -118,7 +118,7 @@ class User {
   static logout( data, callback ) {
     const cb = callback;
     createRequest( {
-      url: URL + '/logout',
+      url: this.URL + '/logout',
       data,
       responseType: 'json',
       method: 'POST',
