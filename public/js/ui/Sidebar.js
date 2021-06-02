@@ -49,7 +49,7 @@ class Sidebar {
     document.querySelector( '.menu-item_logout' ).
       addEventListener( 'click', evt => {
         evt.preventDefault();
-        User.logout( localStorage.user, ( failed, success ) => 
+        User.logout( {}, ( failed, success ) => 
           success && success.success && App.setState( 'init' )
         );
       } );
