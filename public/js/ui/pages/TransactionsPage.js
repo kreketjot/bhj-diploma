@@ -104,8 +104,7 @@ class TransactionsPage {
     this.lastOptions = options;
     Account.get( options.account_id, ( error, response ) => {
       if (response) {
-        const title = response.data.find( 
-          item => item.id === options.account_id ).name;
+        const title = response.data.name;
         this.renderTitle( title );
       }
     } );

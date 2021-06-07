@@ -34,8 +34,9 @@ class AccountsWidget {
   registerEvents() {
     this.element.addEventListener( 'click', evt => {
       evt.preventDefault();
-      if (evt.target.matches( '.account_link' )) {
-        this.onSelectAccount( evt.target.closest( '.account' ) );
+      const account = evt.target.closest( '.account' );
+      if (account) {
+        this.onSelectAccount( account );
       }
       else if (evt.target.matches( '.create-account' )) {
         App.getModal( 'createAccount' ).open();
@@ -62,7 +63,6 @@ class AccountsWidget {
       if (response && response.success) {
         this.clear();
         this.render( response.data );
-        // response.data.forEach( item => this.renderItem( item ) );
       }
     } );
   }
@@ -100,7 +100,7 @@ class AccountsWidget {
   getAccountHTML( item ) {
     return `
       <li class="account" data-id="${item.id}">
-        <a class="account_link" href="#">
+        <a href="#">
           <span>${item.name}</span> /
           <span>${item.sum} <span class="currency">₽</span></span>
         </a>
@@ -113,17 +113,10 @@ class AccountsWidget {
    * AccountsWidget.getAccountHTML HTML-код элемента
    * и добавляет его внутрь элемента виджета
    * */
-  renderItem( data ) {
-    const html = this.getAccountHTML( data );
-    this.element.insertAdjacentHTML( 'beforeend', html );
-  }
-
   render( data ) {
     const el = document.createElement( 'div' );
     const html = data.reduce( ( res, cur ) => res + this.getAccountHTML( cur ), '' );
     this.element.append( el );
     el.outerHTML = html;
-    this.registerEvents();
-    // this.element.insertAdjacentHTML( 'beforeend', html );
   }
 }

@@ -27,15 +27,14 @@ class User {
    * */
   static current() {
     const user = localStorage.user;
-    if (!user) {
-      return;
-    }
     let data;
-    try {
-      data = JSON.parse( user );
-    } catch (error) {
-      console.error( error );
-      return;
+    if (user) {
+      try {
+        data = JSON.parse( user );
+      } catch (error) {
+        console.error( error );
+        return;
+      }
     }
     return data;
   }
@@ -45,12 +44,11 @@ class User {
    * авторизованном пользователе.
    * */
   static fetch( callback ) {
-    const cb = callback; // чтобы в рекурсию не ушло
     createRequest( {
       url: this.URL + '/current',
       responseType: 'json',
       method: 'GET',
-      callback( error, response ) {
+      callback: ( error, response ) => {
         if (response) {
           if (response.success) {
             User.setCurrent( response.user );
@@ -58,7 +56,7 @@ class User {
             User.unsetCurrent();
           }
         }
-        cb( error, response);
+        callback( error, response);
       }
     } );
   }
@@ -74,15 +72,14 @@ class User {
       console.error( 'Не хватает данных для входа' );
       return;
     }
-    const cb = callback;
     createRequest( {
       url: this.URL + '/login',
       data,
       responseType: 'json',
       method: 'POST',
-      callback( error, response ) {
+      callback: ( error, response ) => {
         response && response.success && User.setCurrent( response.user );
-        cb( error, response );
+        callback( error, response );
       }
     } );
   }
@@ -98,15 +95,14 @@ class User {
       console.error( 'Не хватает данных для регистрации' );
       return;
     }
-    const cb = callback;
     createRequest( {
       url: this.URL + '/register',
       data,
       responseType: 'json',
       method: 'POST',
-      callback( error, response ) {
+      callback: ( error, response ) => {
         response && response.success && User.setCurrent( response.user );
-        cb( error, response );
+        callback( error, response );
       }
     } ); 
   }
@@ -116,15 +112,14 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   static logout( data, callback ) {
-    const cb = callback;
     createRequest( {
       url: this.URL + '/logout',
       data,
       responseType: 'json',
       method: 'POST',
-      callback( error, response ) {
+      callback: ( error, response ) => {
         response && response.success && User.unsetCurrent();
-        cb( error, response );
+        callback( error, response );
       }
     } );
   }
