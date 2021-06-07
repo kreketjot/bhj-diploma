@@ -102,10 +102,15 @@ class TransactionsPage {
       return;
     }
     this.lastOptions = options;
-    Account.get( options.account_id, ( error, response ) => {
-      if (response) {
-        const title = response.data.name;
-        this.renderTitle( title );
+    const account_id = options.account_id;
+    Account.get( account_id, ( error, response ) => {
+      if (response && response.success) {
+        this.renderTitle( response.data.name );
+        Transaction.list( { account_id }, ( error, response ) => {
+          if (response && response.success) {
+            this.renderTransactions( response.data );
+          }
+        } );
       }
     } );
   }
@@ -147,7 +152,10 @@ class TransactionsPage {
       'ноября', 
       'декабря'
     ];
-    const arr = date.split(' ');
+    const arr = [
+      date.substring( 0, 10 ), // всё потому, что разные форматы...
+      date.substring( 11, 19 )
+    ];
     const yyyy_mm_dd = arr[0].split('-');
     const hh_mm_ss = arr[1].split(':');
     return `${+yyyy_mm_dd[2]} ${months[yyyy_mm_dd[1] - 1]} ${+yyyy_mm_dd[0]} г.` + 
