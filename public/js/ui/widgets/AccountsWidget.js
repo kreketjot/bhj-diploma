@@ -55,11 +55,7 @@ class AccountsWidget {
    * метода renderItem()
    * */
   update() {
-    const user = User.current();
-    if (!user) {
-      return;
-    }
-    Account.list( user, ( error, response ) => {
+    Account.list( {}, ( error, response ) => {
       if (response && response.success) {
         this.clear();
         this.render( response.data );
@@ -73,7 +69,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    [...this.element.getElementsByClassName( 'account' )].forEach( el => el.remove() );
+    this.element.innerHTML = '';
   }
 
   /**
@@ -114,9 +110,17 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   render( data ) {
-    const el = document.createElement( 'div' );
-    const html = data.reduce( ( res, cur ) => res + this.getAccountHTML( cur ), '' );
-    this.element.append( el );
-    el.outerHTML = html;
+    let html = 
+      `<li class="header">
+        Счета
+        <div class="pull-right">
+          <span class="create-account label label-success">
+            <span class="fa fa-plus"></span>
+              Новый счёт
+            </span>
+          </div>
+      </li>`;
+    html += data.reduce( ( res, cur ) => res + this.getAccountHTML( cur ), '' );
+    this.element.innerHTML = html;
   }
 }
