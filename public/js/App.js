@@ -181,7 +181,7 @@ class App {
   static update() {
     this.updateWidgets();
     this.updatePages();
-    this.updateForms();
+    // this.updateForms();
   }
 
   /**
